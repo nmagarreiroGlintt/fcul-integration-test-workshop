@@ -53,9 +53,10 @@ public class PersonControllerTest extends IntegrationParentTest {
 
     @Test
     public void testGetPersonById_Found() throws Exception {
-        personRepository.save(new Person("Ana"));
+        var name = "Ana";
+        var persistedPerson = personRepository.save(new Person(name));
 
-        final var personId = "1";
+        final var personId = persistedPerson.getId();
         final var endpoint = ControllerPaths.BASE + ControllerPaths.PERSON_OPERATIONS + "/" + personId;
 
         final MockHttpServletResponse response = this.mockMvcPerformGet(endpoint);
@@ -65,8 +66,8 @@ public class PersonControllerTest extends IntegrationParentTest {
                 new TypeReference<PersonDto>() {
                 });
         Assertions.assertNotNull(responseObject);
-        Assertions.assertEquals(1L, responseObject.getId());
-        Assertions.assertEquals("Ana", responseObject.getName());
+        Assertions.assertEquals(personId, responseObject.getId());
+        Assertions.assertEquals(name, responseObject.getName());
     }
 
     @Test
